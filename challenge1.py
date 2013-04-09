@@ -3,7 +3,7 @@ import time
 import sys
 import os
 
-pyrax.set_credential_file("/Users/kevi4546/.rackspace_cloud_credentials")
+pyrax.set_credential_file("~/.rackspace_cloud_credentials")
 cs = pyrax.cloudservers
 
 def create(servname):
