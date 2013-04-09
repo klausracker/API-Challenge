@@ -6,7 +6,7 @@ import os
 pyrax.set_credential_file("~/.rackspace_cloud_credentials")
 cs = pyrax.cloudservers
 
-def create(servname):
+def create(servName):
   image = "c195ef3b-9195-4474-b6f7-16e5bd86acd0"
   server = cs.servers.create(servName, image, "2")
   root = server.adminPass
