@@ -12,7 +12,7 @@ def main():
   for pos, domain in enumerate(domainlist, start=1):
     print "%s: %s" % (pos, domain.name)
   dom_choice = int(raw_input ("Select your domain form this list: "))
-  domain = domainlist[dom_choice]
+  domain = domainlist[dom_choice - 1]
   isAddress(dns, domain)
 
 def isAddress(dns, domain):
