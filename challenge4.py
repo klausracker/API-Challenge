@@ -11,7 +11,7 @@ def main():
   domainlist = dns.list()
   for pos, domain in enumerate(domainlist, start=1):
     print "%s: %s" % (pos, domain.name)
-  dom_choice = int(raw_input ("Select your domain form this list: "))
+  dom_choice = int(raw_input ("Select your domain from this list: "))
   domain = domainlist[dom_choice - 1]
   isAddress(dns, domain)
 
