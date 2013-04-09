@@ -7,9 +7,6 @@ pyrax.set_credential_file("~/.rackspace_cloud_credentials")
 dns = pyrax.cloud_dns
 
 def main():
-  start()
-
-def start():
   print "Here are your domains to select from: "
   domainlist = dns.list()
   for pos, domain in enumerate(domainlist, start=1):
