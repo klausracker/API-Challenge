@@ -27,7 +27,7 @@ def isAddress(dns, domain):
       addr = socket.inet_aton(ipaddr)
     except socket.error:
       print "Not a valid IPv4 address, please try again: "
-      isAddress(dns, dom, domain)
+      isAddress(dns, domain)
     return address.count('.') == 3
   except socket.error:
     print "Not a valid IPv4 address, please try again: "
