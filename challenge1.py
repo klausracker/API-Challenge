@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import pyrax
 import time
 import sys
@@ -17,16 +19,16 @@ def create(servName):
 
 def getInfo(servName, server, root):
   serverinfo = cs.servers.get(server.id)
-  if len(serverinfo.networks) > 0:
+  while not serverinfo.networks:
+    time.sleep(5)
+    getInfo(servName, server, root)
+  else:    
     network = serverinfo.networks
     print ""
     print "Server Name: ", servName
     print "Server Password: ", root
     print "Server Networks: ", network['public']
     print "--"
-  else:
-    time.sleep(10)
-    getInfo(servName, server, root)
 
 i = 1
 print ""
@@ -37,5 +39,5 @@ serverCount = int(raw_input ("How many servers would you like to create? "))
 while i <= serverCount:
   servName = preName + str(i)
   create(servName)
-  i = i + 1
+  i += 1
 

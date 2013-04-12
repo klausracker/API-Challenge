@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import pyrax
 import time
 import sys
