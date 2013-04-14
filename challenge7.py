@@ -40,24 +40,20 @@ def info():
 
 def createservers(servname1, servname2, loadname):
   server1 = cs.servers.create(servname1, image, "2")
-  servinfo1 = server1.id
   root1 = server1.adminPass
   server2 = cs.servers.create(servname2, image, "2")
-  servinfo2 = server2.id
   root2 = server2.adminPass
   print "Creating servers and waiting for networking information. This may take some time.."
-  print ""
-  createload(server1, server2, servinfo1, servinfo2, loadname)
-  print "Your load balancer has been created with nodes", server1.name, "and", server2.name
-  print "Your root passwords are", server1.name, ":", root1, "and", server2.name, ":", root2
-  print    
-  print "Done!"
+  print 
+  createload(server1, server2, loadname)
+  print "Your load balancer", loadname, "has been created with nodes", server1.name, "and", server2.name
+  printinfo(server1, server2, root1, root2)
 
-def createload(server1, server2, servinfo1, servinfo2, loadname):
+def createload(server1, server2, loadname):
   while not (server1.networks and server2.networks):
     time.sleep(1)
-    server1 = cs.servers.get(servinfo1)
-    server2 = cs.servers.get(servinfo2)
+    server1 = cs.servers.get(server1.id)
+    server2 = cs.servers.get(server2.id)
 
   server1_ip = server1.networks["private"][0]
   server2_ip = server2.networks["private"][0]
@@ -67,6 +63,18 @@ def createload(server1, server2, servinfo1, servinfo2, loadname):
 
   vip = clb.VirtualIP(type="PUBLIC")
   lb = clb.create(loadname, port=80, protocol="HTTP", nodes=[node1, node2], virtual_ips=[vip])
-  
+
+def printinfo(server1, server2, root1, root2):
+  server1 = cs.servers.get(server1.id)
+  server2 = cs.servers.get(server2.id)
+  print
+  print "Your server information is:"
+  print
+  print server1.name, "@", server1.networks["public"], "with root password", root1
+  print server2.name, "@", server2.networks["public"], "with root password", root2
+  print    
+  print "Done!"
+  print
+
 if __name__ == "__main__":
   main()
