@@ -19,19 +19,40 @@ import pyrax
 import sys
 import os
 
+
 pyrax.set_credential_file("~/.rackspace_cloud_credentials")
 
 cf = pyrax.cloudfiles
 
-def main():
-  createcont()
 
-def createcont():
+def main():
   print "Hello, about to upload your files into a container. Hopefully."
-  cont = cf.create_container(sys.argv[2])
+  localdir = sys.argv[1]
+  contname = sys.argv[2]
+  flip = 0
+  print "Checking to see if you passed your path as your container. Hoping you didn't use any slashes '/' in your container name"
+  checkargs(localdir, contname, flip)
+
+def checkargs(localdir, contname, flip):
+  count = 0
+  for i in contname:
+    if i == '/':
+      count += 1
+  if (count >= 1 and flip >= 1):
+    print "Directory structure discovered in both arguments, not sure which is your container. I'm going to fail. Sorry."
+    quit()
+  elif (count >= 1 and flip == 0):
+    print "Directory structure discovered. You may have passed your path as your container. Flipping your choices and trying again"
+    contname, localdir = localdir, contname
+    flip += 1
+    checkargs(localdir, contname, flip)
+  else:
+    createcont(localdir, contname)
+
+def createcont(localdir, contname):
+  cont = cf.create_container(contname)
   print "Creating container ", cont.name, "if it doesn't already exist."
   print "If it does exist, we'll just write into the existing container."
-  localdir = sys.argv[1]
   testpath(cont, localdir)
 
 def testpath(cont, localdir):
