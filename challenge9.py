@@ -15,12 +15,30 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+"""challenge9.py.
+Build a server from a desired image, name it based upon a FQDN, then assign a DNS A record to the same FQDN.
+
+Usage:
+challenge9.py (-h | --help)
+challenge9.py FQDN IMAGE FLAVOR
+
+Arguments:
+FQDN     The Fully Qualified Domain Name. Must be a registered domain name. 
+IMAGE    The 36 character Rackspace image ID to build the server from
+FLAVOR   The flavor size (2 - 8) in which to create your server instance
+
+Options:
+-h --help    Show this help screen. 
+
+"""
+
 import pyrax
 import time
 import sys
 import os
 import pyrax.exceptions as exc
 import whois
+from docopt import docopt
 
 pyrax.set_credential_file("~/.rackspace_cloud_credentials")
 
@@ -93,7 +111,7 @@ def getaddresses(server, fqdn):
 
 def adddns(ip, fqdn):
   print
-  print "Address: ", ip
+  print "Assigning the DNS entry now. Hopefully.."
 
   record = [{"type": "A",
             "name": fqdn,
@@ -111,7 +129,6 @@ def adddns(ip, fqdn):
       dom = dns.create(name=fqdn, emailAddress=email)
     except exc.DomainCreationFailed as e:
         print "Domain creation failed: domain may be owned elsewhere.", e
-        quit()
     print 
     print "Domain creation successful!"
   
@@ -122,4 +139,5 @@ def adddns(ip, fqdn):
 
 
 if __name__ == "__main__":
+  arguments = docopt(__doc__)
   main()
