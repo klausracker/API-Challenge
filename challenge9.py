@@ -22,7 +22,7 @@ import os
 import pyrax.exceptions as exc
 import whois
 
-pyrax.set_credential_file("/Users/kevi4546/.rackspace_cloud_credentials")
+pyrax.set_credential_file("~/.rackspace_cloud_credentials")
 
 cs = pyrax.cloudservers
 dns = pyrax.cloud_dns
