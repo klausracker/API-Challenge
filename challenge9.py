@@ -111,6 +111,7 @@ def adddns(ip, fqdn):
       dom = dns.create(name=fqdn, emailAddress=email)
     except exc.DomainCreationFailed as e:
         print "Domain creation failed: domain may be owned elsewhere.", e
+        quit()
     print 
     print "Domain creation successful!"
   
