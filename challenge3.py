@@ -15,37 +15,50 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+
+"""challenge3.py.
+
+Usage: 
+  challenge3.py (-h | --help)
+  challenge3.py PATH_TO_FILES CONTAINER_NAME
+
+Arguments:
+  PATH_TO_FILES    The directory path to your files you wish to upload
+  CONTAINER_NAME   The container name you wish to upload your files into
+
+Options:
+  -h --help   Show this help screen
+
+"""
+
 import pyrax
 import sys
 import os
-
+from docopt import docopt
 
 pyrax.set_credential_file("~/.rackspace_cloud_credentials")
 
-cf = pyrax.cloudfiles
 
+cf = pyrax.cloudfiles
 
 def main():
   print "Hello, about to upload your files into a container. Hopefully."
   localdir = sys.argv[1]
   contname = sys.argv[2]
-  flip = 0
-  print "Checking to see if you passed your path as your container. Hoping you didn't use any slashes '/' in your container name"
-  checkargs(localdir, contname, flip)
+  checkargs(localdir, contname)
 
-def checkargs(localdir, contname, flip):
+def checkargs(localdir, contname):
   count = 0
+  print "Checking to see if you passed your path as your container. Hoping you didn't use any slashes '/' in your container name"
   for i in contname:
     if i == '/':
+      if count == 1:
+        print "Slashes found in both arguments. Can't tell which is your path. I'm going to fail. Sorry."
+        quit()
+      print "Directory structure discovered. You may have passed your path as your container. Flipping your choices and trying again"
+      contname, localdir = localdir, contname
       count += 1
-  if (count >= 1 and flip >= 1):
-    print "Directory structure discovered in both arguments, not sure which is your container. I'm going to fail. Sorry."
-    quit()
-  elif (count >= 1 and flip == 0):
-    print "Directory structure discovered. You may have passed your path as your container. Flipping your choices and trying again"
-    contname, localdir = localdir, contname
-    flip += 1
-    checkargs(localdir, contname, flip)
+      checkargs(localdir, contname)
   else:
     createcont(localdir, contname)
 
@@ -68,4 +81,5 @@ def uploadfiles(cont, localdir):
   print "Done!"
 
 if __name__ == "__main__":
+  arguments = docopt(__doc__)
   main()
