@@ -16,7 +16,8 @@
 # under the License.
 
 """challenge9.py.
-Build a server from a desired image, name it based upon a FQDN, then assign a DNS A record to the same FQDN.
+Build a server from a desired image, name it based upon a FQDN, then assign a DNS A record 
+from the server's public IPv4 address to the same FQDN.
 
 Usage:
 challenge9.py (-h | --help)
