@@ -41,7 +41,7 @@ import pyrax.exceptions as exc
 import whois
 from docopt import docopt
 
-pyrax.set_credential_file("~/.rackspace_cloud_credentials")
+pyrax.set_credential_file("/.rackspace_cloud_credentials")
 
 cs = pyrax.cloudservers
 dns = pyrax.cloud_dns
@@ -55,13 +55,12 @@ def checkargs():
   image = sys.argv[2]
   flavor = sys.argv[3]
 
-  validlist = []
-  imglist = cs.images.list()
-  for img in imglist:
-    validlist.append(img.id)
-  if image in validlist:
+
+  try:
+    validimg = [img for img in cs.images.list()
+            if image in img.id]
     print "Good news, we found your image, continuing.."
-  else:
+  except:
     print "Sorry, your image was not found in the image list. Please try again."
     quit()
 
