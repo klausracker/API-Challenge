@@ -41,7 +41,8 @@ import pyrax.exceptions as exc
 import whois
 from docopt import docopt
 
-pyrax.set_credential_file("/.rackspace_cloud_credentials")
+creds_file = os.path.expanduser("~/.rackspace_cloud_credentials")
+pyrax.set_credential_file(creds_file)
 
 cs = pyrax.cloudservers
 dns = pyrax.cloud_dns
@@ -57,9 +58,8 @@ def checkargs():
 
 
   try:
-    validimg = [img for img in cs.images.list()
-            if image in img.id]
-    print "Good news, we found your image, continuing.."
+    img = cs.images.get(image)
+    print "Good news, we found a valid image, continuing.."
   except:
     print "Sorry, your image was not found in the image list. Please try again."
     quit()
@@ -84,11 +84,11 @@ def checkargs():
     print "This domain isn't a FQDN, please choose one that is. Quitting now."
     quit() 
 
-  create(fqdn, image, flavor)
+  create(fqdn, image, img, flavor)
 
-def create(fqdn, image, flavor):
+def create(fqdn, image, img, flavor):
   print
-  print "Creating server with name", fqdn, "from image", image, "of flavor size", flavor
+  print "Creating server with name", fqdn, "from", img, "of flavor size", flavor
   print "then creating a DNS entry to the public IP. Wish me luck!"
 
   server = cs.servers.create(fqdn, image, flavor)
