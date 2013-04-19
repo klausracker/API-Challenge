@@ -36,8 +36,8 @@ import sys
 import os
 from docopt import docopt
 
-pyrax.set_credential_file("~/.rackspace_cloud_credentials")
-
+creds_file = os.path.expanduser("~/.rackspace_cloud_credentials")
+pyrax.set_credential_file(creds_file)
 
 cf = pyrax.cloudfiles
 

@@ -47,22 +47,22 @@ def main():
 
 def getinfo():
   print
-  imageName = str(raw_input ("What would you like your image to be named? "))
-  servName = str(raw_input ("What would you like your new server to be named? "))
-  flavSize = str(raw_input ("What flavor size is the original instance (minimum)? "))
+  imagename = str(raw_input ("What would you like your image to be named? "))
+  servname = str(raw_input ("What would you like your new server to be named? "))
+  flavsize = str(raw_input ("What flavor size is the original instance (minimum)? "))
   print
-  createimage(server, imageName, servName, flavSize)
+  createimage(server, imagename, servname, flavsize)
 
-def createimage(server, imageName, servName, flavSize):
-  image_id = server.create_image(imageName)
-  buildimage(server, image_id, servName, flavSize)
+def createimage(server, imagename, servname, flavsize):
+  image_id = server.create_image(imagename)
+  buildimage(server, image_id, servname, flavsize)
 
-def buildimage(server, image_id, servName, flavSize):
+def buildimage(server, image_id, servname, flavsize):
   image = cs.images.get(image_id)
   if image.status == 'ACTIVE':
-    cs.servers.create(servName, image, flavSize)
+    cs.servers.create(servname, image, flavsize)
     print
-    print "Building new server", servName, "from", image.name
+    print "Building new server", servname, "from", image.name
     print
     print "Done!"
     print
@@ -70,7 +70,7 @@ def buildimage(server, image_id, servName, flavSize):
     time.sleep(15)
     print
     print "Image status is", image.status, "- waiting ..."
-    buildimage(server, image_id, servName, flavSize)
+    buildimage(server, image_id, servname, flavsize)
 
 if __name__ == "__main__":
   arguments = docopt(__doc__)
