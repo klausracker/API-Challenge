@@ -15,44 +15,66 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+"""challenge1.py.
+Build a number of servers and display the networking information, root 
+password and server name for each server built.
+
+Usage:
+challenge1.py
+challenge1.py (-h | --help)
+
+Options:
+-h --help    Show this help screen
+
+"""
+
 import pyrax
 import time
 import sys
 import os
+from docopt import docopt
 
-pyrax.set_credential_file("~/.rackspace_cloud_credentials")
+creds_file = os.path.expanduser("~/.rackspace_cloud_credentials")
+pyrax.set_credential_file(creds_file)
+
 cs = pyrax.cloudservers
 
-def create(servName):
-  image = "c195ef3b-9195-4474-b6f7-16e5bd86acd0"
-  server = cs.servers.create(servName, image, "2")
+def main():
+  i = 1
+  print
+  pre = str(raw_input ("What would you like your servers to be named? "))
+  print
+  servercount = int(raw_input ("How many servers would you like to create? "))
+  while i <= servercount:
+    servname = pre + str(i)
+    create(servname)
+    i += 1
+  print
+  print "Done!"
+  print
+
+def create(servname):
+  image = "da1f0392-8c64-468f-a839-a9e56caebf07"
+  server = cs.servers.create(servname, image, "2")
   root = server.adminPass
-  print "Creating server ", servName
+  print
+  print "Creating server ", servname
   print "Server information coming shortly..."
   print ""
-  getInfo(servName, server, root)
-
-def getInfo(servName, server, root):
   serverinfo = cs.servers.get(server.id)
   while not serverinfo.networks:
     time.sleep(5)
-    getInfo(servName, server, root)
+    serverinfo = cs.servers.get(server.id)
   else:    
     network = serverinfo.networks
     print ""
-    print "Server Name: ", servName
+    print "Server Name: ", servname
     print "Server Password: ", root
     print "Server Networks: ", network['public']
+    print
     print "--"
+  
 
-i = 1
-print ""
-preName = str(raw_input ("What would you like your servers to be named? "))
-print ""
-serverCount = int(raw_input ("How many servers would you like to create? "))
-
-while i <= serverCount:
-  servName = preName + str(i)
-  create(servName)
-  i += 1
-
+if __name__ == "__main__":
+  arguments = docopt(__doc__)
+  main()
