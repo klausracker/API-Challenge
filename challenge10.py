@@ -19,7 +19,8 @@
 Create two servers, upload an SSH RSA key, then create a load balancer, add 
 the two servers to the load balancer, then create an A record for the FQDN to
 the load balancer's public IP address. Make a custom error document and  
-upload this document to Cloud Files to be served. Create a monitoring check.
+upload this document to the load balancer to be served. Upload a copy to 
+Cloud Files. Create a Load Balancer monitoring check.
 
 
 Usage:
@@ -145,13 +146,13 @@ def createload(server1, server2, fqdn):
 
   vip = clb.VirtualIP(type="PUBLIC")
   lb = clb.create(fqdn, port=80, protocol="HTTP", nodes=[node1, node2], virtual_ips=[vip])
+  lb.set_error_page(str(text))
   pyrax.utils.wait_until(lb, 'status', 'ACTIVE', interval=10, verbose=True)
   lb.add_health_monitor(type="HTTP", delay=10, timeout=10,
         attemptsBeforeDeactivation=3, path="/",
         statusRegex="^[234][0-9][0-9]$",
         bodyRegex=".* testing .*",
         hostHeader=fqdn)
-  lb.set_error_page(str(text))
 
   print "Your load balancer", loadname, "has been created with nodes", server1.name, "and", server2.name
   uploadfile(errorfile, text)
