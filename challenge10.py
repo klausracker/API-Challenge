@@ -143,8 +143,6 @@ def createload(server1, server2, fqdn):
   lb.manager.set_error_page(lb, str(text))
   print
   ipaddr = lb.virtual_ips
-  print "Public load balancer IP:", ipaddr
-  print
   print "Custom error doc set, waiting for load balancer to return to active state to set monitoring alert.." 
   pyrax.utils.wait_until(lb, 'status', 'ACTIVE', interval=1, verbose=False)
   lb.add_health_monitor(type="HTTP", delay=10, timeout=10,
@@ -162,7 +160,7 @@ def createload(server1, server2, fqdn):
         i += 1
       ip = ipstring[j:i+9]
     i += 1
-  print ip
+  print 
   print "Your load balancer", fqdn, "has been created with nodes", server1.name, "and", server2.name
   uploadfile(text)
   createdns(ip, fqdn)
