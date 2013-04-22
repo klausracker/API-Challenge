@@ -158,7 +158,7 @@ def createload(server1, server2, fqdn):
       j = i+8
       while ipstring[i+8] != ' ':
         i += 1
-      ip = ipstring[j:i+9]
+      ip = ipstring[j:i+8]
     i += 1
   print 
   print "Your load balancer", fqdn, "has been created with nodes", server1.name, "and", server2.name
