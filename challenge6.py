@@ -15,10 +15,26 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+"""
+challenge6.py.
+Create, and then CDN enable a cloud files container.
+
+Usage:
+challenge.py
+challenge.py (-h | --help)
+
+Options:
+-h --help    Show this screen
+
+"""
+
 import pyrax
 import sys
+import os
+from docopt import docopt
 
-pyrax.set_credential_file("~/.rackspace_cloud_credentials")
+creds_file = os.path.expanduser("~/.rackspace_cloud_credentials")
+pyrax.set_credential_file(creds_file)
 
 cf = pyrax.cloudfiles
 
@@ -42,4 +58,5 @@ def enablecont(cont, contname, ttl):
   print "Done!"
 
 if __name__ == "__main__":
+  arguments = docopt(__doc__)
   main()
