@@ -56,7 +56,6 @@ def checkargs():
   image = sys.argv[2]
   flavor = sys.argv[3]
 
-
   try:
     img = cs.images.get(image)
     print "Good news, we found a valid image, continuing.."
@@ -70,9 +69,10 @@ def checkargs():
     print "Your flavor input was not numeric. Please try again."
     quit()
 
-  if (int(flavor) >= 2 and int(flavor) <= 8):
+  try:
+    cs.flavors.get(flavor)
     print "Valid flavor, still continuing"
-  else:
+  except:
     print "Your flavor is out of range. Please try again."
     quit()
 
