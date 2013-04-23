@@ -142,7 +142,6 @@ def createload(server1, server2, fqdn):
   pyrax.utils.wait_until(lb, 'status', 'ACTIVE', interval=10, verbose=True)
   lb.manager.set_error_page(lb, str(text))
   print
-  ipaddr = lb.virtual_ips
   print "Custom error doc set, waiting for load balancer to return to active state to set monitoring alert.." 
   pyrax.utils.wait_until(lb, 'status', 'ACTIVE', interval=1, verbose=False)
   lb.add_health_monitor(type="HTTP", delay=10, timeout=10,
