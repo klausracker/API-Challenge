@@ -15,12 +15,27 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+"""challenge4.py.
+Set a DNS A record to a domain from your cloud DNS.
+
+Usage:
+challenge4.py
+challenge4.py (-h | --help)
+
+Options:
+-h --help    Show this help screen
+
+"""
+
 import pyrax
 import sys
 import os
 import socket
+from docopt import docopt
 
-pyrax.set_credential_file("~/.rackspace_cloud_credentials")
+creds_file = os.path.expanduser("~/.rackspace_cloud_credentials")
+pyrax.set_credential_file(creds_file)
+
 dns = pyrax.cloud_dns
 
 def main():
@@ -30,25 +45,18 @@ def main():
     print "%s: %s" % (pos, domain.name)
   dom_choice = int(raw_input ("Select your domain from this list: "))
   domain = domainlist[dom_choice - 1]
-  isAddress(dns, domain)
+  isaddress(dns, domain)
 
-def isAddress(dns, domain):
+def isaddress(dns, domain):
   ipaddr = str(raw_input ("Please enter the desired IPv4 address for your DNS A record: "))
   try:
-    addr = socket.inet_pton(socket.AF_INET, ipaddr)
-  except AttributeError:
-    try:
-      addr = socket.inet_aton(ipaddr)
-    except socket.error:
-      print "Not a valid IPv4 address, please try again: "
-      isAddress(dns, domain)
-    return address.count('.') == 3
+    addr = socket.inet_aton(ipaddr)
   except socket.error:
     print "Not a valid IPv4 address, please try again: "
-    isAddress(dns, domain)     
-  addRecord(dns, domain, ipaddr) 
+    isaddress(dns, domain)
+  addrecord(dns, domain, ipaddr) 
 
-def addRecord(dns, domain, ipaddr):
+def addrecord(dns, domain, ipaddr):
   print
   print "Adding record ... "
   try:
@@ -60,4 +68,5 @@ def addRecord(dns, domain, ipaddr):
     quit()
 
 if __name__ == "__main__":
+  arguments = docopt(__doc__)
   main()
