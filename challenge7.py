@@ -15,12 +15,28 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+"""
+challenge7.py.
+Create two servers, and add them as nodes to a load balancer.
+
+Usage:
+challenge7.py
+challenge7.py (-h | --help)
+
+Options:
+-h --help    Show this help screen.
+
+"""
+
 import pyrax
 import time
 import sys
 import os
+from docopt import docopt
 
-pyrax.set_credential_file("~/.rackspace_cloud_credentials")
+creds_file = os.path.expanduser("~/.rackspace_cloud_credentials")
+pyrax.set_credential_file(creds_file)
+
 cs = pyrax.cloudservers
 clb = pyrax.cloud_loadbalancers
 image = "c195ef3b-9195-4474-b6f7-16e5bd86acd0"
@@ -77,4 +93,5 @@ def printinfo(server1, server2, root1, root2):
   print
 
 if __name__ == "__main__":
+  arguments = docopt(__doc__)
   main()
