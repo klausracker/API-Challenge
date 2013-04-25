@@ -15,12 +15,28 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+"""challenge8.py.
+Create a static webpage to be served from a cloud files container. Create
+a container, CDN enable it, enable to serve a default document, upload
+the document and create a CNAME entry to the CDN URL.
+
+Usage:
+challenge8.py
+challenge8.py (-h | --help)
+
+Options:
+-h --help    Show this help screen.
+
+"""
+
 import pyrax
 import sys
 import os
 from html import HTML
+from docopt import docopt
 
-pyrax.set_credential_file("~/.rackspace_cloud_credentials")
+creds_file = os.path.expanduser("~/.rackspace_cloud_credentials")
+pyrax.set_credential_file(creds_file)
 
 cf = pyrax.cloudfiles
 dns = pyrax.cloud_dns
@@ -85,4 +101,5 @@ def setcname(url, ttl):
 
 
 if __name__ == "__main__":
+  arguments = docopt(__doc__)
   main()
