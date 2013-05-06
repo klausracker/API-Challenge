@@ -67,7 +67,7 @@ def main():
     except:
       print
       print "Something happened on the way to writing your file, sorry. Please try again."
-      setcreds()
+      setcredsanddelete()
     try:
       creds_file = os.path.expanduser("~/.customer_cloud_credentials")
       pyrax.set_credential_file(creds_file)
